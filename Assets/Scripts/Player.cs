@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public int maxOxygenCapacity = 1;
+    public static float oxygenTank = 0; // players health
 
-    [SerializeField]
-    float oxygenTank = 100; // players health
-    
     Rigidbody2D rigidbody2D;
     SpriteRenderer spriteRenderer;
 
@@ -22,6 +21,8 @@ public class Player : MonoBehaviour
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        oxygenTank = maxOxygenCapacity;
     }
 
     // Update is called once per frame
@@ -59,10 +60,11 @@ public class Player : MonoBehaviour
         }
 
         LoseOxygenOverTime();
+
     }
 
     void LoseOxygenOverTime()
     {
-        oxygenTank -= 1 * Time.deltaTime;
+        oxygenTank -= 0.010f * Time.deltaTime;
     }
 }
