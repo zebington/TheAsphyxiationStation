@@ -1,12 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     public int maxOxygenCapacity = 1;
     public static float oxygenTank = 0; // players health
     public bool onOxygenPad = false;
+
+    public int score = 0;
+    public Text scoreText;
 
     Rigidbody2D rigidbody2D;
     SpriteRenderer spriteRenderer;
@@ -24,6 +28,7 @@ public class Player : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         oxygenTank = maxOxygenCapacity;
+        updateScoreText();
     }
 
     // Update is called once per frame
@@ -101,6 +106,19 @@ public class Player : MonoBehaviour
         {
             onOxygenPad = true;
         }
+
+        if (collision.gameObject.tag == "Gem")
+        {
+            score += 10;
+            updateScoreText();
+            collision.gameObject.SetActive(false);
+        }
+
+        if(collision.gameObject.tag == "Enemy")
+        {
+
+        }
+
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -109,5 +127,10 @@ public class Player : MonoBehaviour
         {
             onOxygenPad = false;
         }
+    }
+
+    void updateScoreText()
+    {
+        scoreText.text = score.ToString();
     }
 }
