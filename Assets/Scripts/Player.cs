@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     public int maxOxygenCapacity = 1;
     public static float oxygenTank = 0; // players health
+    public bool onOxygenPad = false;
 
     Rigidbody2D rigidbody2D;
     SpriteRenderer spriteRenderer;
@@ -59,12 +60,54 @@ public class Player : MonoBehaviour
             rigidbody2D.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
 
-        LoseOxygenOverTime();
+        if(onOxygenPad)
+        {
+            if (oxygenTank < maxOxygenCapacity)
+            {
+                IncreaseOxygenOverTime();
+            }
+        } else
+        {
+            if (oxygenTank > 0)
+            {
+                LoseOxygenOverTime();
+            } else
+            {
+                // Game Over
+            }
+        }
 
     }
 
     void LoseOxygenOverTime()
     {
-        oxygenTank -= 0.010f * Time.deltaTime;
+        if(onOxygenPad == false && oxygenTank > 0)
+        {
+            oxygenTank -= 0.05f * Time.deltaTime;
+        }
+    }
+
+    void IncreaseOxygenOverTime()
+    {
+        if (onOxygenPad == true && oxygenTank > 0)
+        {
+            oxygenTank += 0.05f * Time.deltaTime;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.name.Equals("OxygenPad"))
+        {
+            onOxygenPad = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.name.Equals("OxygenPad"))
+        {
+            onOxygenPad = false;
+        }
     }
 }
